@@ -37,6 +37,7 @@ export default [
 			"max-classes-per-file": "off",
 			"no-useless-assignment": "off",
 			"@typescript-eslint/no-namespace": "off",
+			"@typescript-eslint/no-misused-promises": "off",
 		},
 		files: ["**/*.ts"],
 		ignores: ["**/*.test.ts", "test/**/*.ts", "**/*.d.ts"],
