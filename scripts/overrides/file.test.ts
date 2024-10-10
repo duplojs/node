@@ -1,4 +1,4 @@
-import { fspSpy, fspSpyResetMock } from "@tests/utils/fs";
+import { fspSpy, fspSpyResetMock } from "@test/utils/fs";
 import "./file";
 import { File } from "@duplojs/core";
 

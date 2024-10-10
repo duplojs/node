@@ -33,18 +33,20 @@ export function makeParsingBodyTextHook(config: DuploConfig) {
 				request.raw.request.on("error", errorCallback);
 
 				request.raw.request.on("data", (chunck) => {
-					if (typeof chunck !== "string") {
-						request.raw.request.emit("error", new Error("Recieve chunck is not a string."));
+					if (!(chunck instanceof Buffer) && typeof chunck !== "string") {
+						request.raw.request.emit("error", new Error("Recieve chunck is not buffer or string."));
 						return;
 					}
 
-					byteLengthBody += Buffer.byteLength(chunck);
+					byteLengthBody += chunck instanceof Buffer
+						? chunck.byteLength
+						: Buffer.byteLength(chunck);
 
 					if (byteLengthBody > bodySizeLimit) {
 						request.raw.request.emit("error", new BodySizeLimitError());
 						return;
 					}
-					stringBody += chunck;
+					stringBody += chunck.toString();
 				});
 
 				request.raw.request.on("end", () => {

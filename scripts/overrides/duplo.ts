@@ -130,7 +130,7 @@ Duplo.prototype.launch = async function(this: Duplo, onStart) {
 
 	server.addListener("listening", () => this.hooksInstanceLifeCycle.onStart.launchSubscriberAsync(this));
 
-	server.listen(this.config.port);
+	server.listen(this.config.port, this.config.host);
 
 	return server;
 };

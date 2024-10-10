@@ -1,6 +1,6 @@
-import { fsSpy, fspSpy } from "@tests/utils/fs";
+import { fsSpy, fspSpy } from "@test/utils/fs";
 import { afterSendDeleteAttachedFiles } from "./afterSendDeleteAttachedFiles";
-import { createFakeRequest } from "@tests/utils/request";
+import { createFakeRequest } from "@test/utils/request";
 
 describe("afterSendDeleteAttachedFiles", () => {
 	it("delete attached file", async() => {

@@ -3,7 +3,7 @@ import httpMocks from "node-mocks-http";
 import "./duplo";
 import { Server as ServerHttp } from "http";
 import { Server as ServerHttps } from "https";
-import type { ExpectType } from "@tests/utils/expectType";
+import type { ExpectType } from "@test/utils/expectType";
 
 describe("duplo", () => {
 	it("launch http", async() => {
@@ -14,7 +14,7 @@ describe("duplo", () => {
 		const duplo = new Duplo({
 			environment: "TEST",
 			host: "localhost",
-			port: 1506,
+			port: 15061,
 		});
 
 		duplo.register(...useBuilder.getAllCreatedDuplose());
@@ -35,7 +35,7 @@ describe("duplo", () => {
 		const duplo = new Duplo({
 			environment: "TEST",
 			host: "localhost",
-			port: 1506,
+			port: 15062,
 			https: {},
 		});
 
@@ -55,11 +55,12 @@ describe("duplo", () => {
 		const duplo = new Duplo({
 			environment: "TEST",
 			host: "localhost",
-			port: 1506,
+			port: 15063,
 		});
 
 		const spyOnStart = vi.fn();
 		const server = await duplo.launch(spyOnStart);
+
 		await new Promise((res) => void setTimeout(res, 100));
 		await new Promise<void>((res) => void server?.close(() => void res()));
 
@@ -70,7 +71,7 @@ describe("duplo", () => {
 		const duplo = new Duplo({
 			environment: "TEST",
 			host: "localhost",
-			port: 1506,
+			port: 15064,
 		});
 
 		const route = useBuilder()
@@ -104,7 +105,7 @@ describe("duplo", () => {
 		const duplo = new Duplo({
 			environment: "TEST",
 			host: "localhost",
-			port: 1506,
+			port: 15065,
 		});
 
 		const { req, res } = httpMocks.createMocks();

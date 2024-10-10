@@ -1,16 +1,16 @@
 import { Response, File } from "@duplojs/core";
 import { beforSendDefineContentType } from "./beforeSendDefineContentType";
-import { createFakeRequest } from "@tests/utils/request";
+import { createFakeRequest } from "@test/utils/request";
 
 describe("beforeSendDefineContentType", () => {
 	const request = createFakeRequest();
 
 	it("content type already define", () => {
-		const response = new Response(200, "toto", undefined).setHeader("content-type", "test");
+		const response = new Response(200, "toto", undefined).setHeader("content-type", "@test");
 
 		beforSendDefineContentType(request, response);
 
-		expect(response.headers["content-type"]).toBe("test");
+		expect(response.headers["content-type"]).toBe("@test");
 	});
 
 	it("content type file", () => {
@@ -30,7 +30,7 @@ describe("beforeSendDefineContentType", () => {
 	});
 
 	it("content type text", () => {
-		const response = new Response(200, "toto", "test");
+		const response = new Response(200, "toto", "@test");
 
 		beforSendDefineContentType(request, response);
 

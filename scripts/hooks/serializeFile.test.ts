@@ -1,5 +1,5 @@
-import { fs, fsSpy, fsSpyResetMock } from "@tests/utils/fs";
-import { createFakeRequest } from "@tests/utils/request";
+import { fs, fsSpy, fsSpyResetMock } from "@test/utils/fs";
+import { createFakeRequest } from "@test/utils/request";
 import { serializeFileHook } from "./serializeFile";
 import { Response, File } from "@duplojs/core";
 import { EventEmitter } from "stream";

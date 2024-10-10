@@ -1,4 +1,4 @@
-import { createFakeRequest } from "@tests/utils/request";
+import { createFakeRequest } from "@test/utils/request";
 import { serializeTextHook } from "./serializeText";
 import { Response } from "@duplojs/core";
 
@@ -9,7 +9,7 @@ describe("serializeText", () => {
 
 		request.raw.response.write = spy;
 
-		serializeTextHook(request, new Response(200, "test", undefined));
+		serializeTextHook(request, new Response(200, "@test", undefined));
 
 		expect(spy).toHaveBeenCalledTimes(0);
 	});
@@ -20,7 +20,7 @@ describe("serializeText", () => {
 
 		request.raw.response.write = spy;
 
-		const result = serializeTextHook(request, new Response(200, "test", { test: 1 }));
+		const result = serializeTextHook(request, new Response(200, "@test", { test: 1 }));
 
 		expect(result).toBe(true);
 		expect(spy).lastCalledWith(JSON.stringify({ test: 1 }));
@@ -32,7 +32,7 @@ describe("serializeText", () => {
 
 		request.raw.response.write = spy;
 
-		const result = serializeTextHook(request, new Response(200, "test", null));
+		const result = serializeTextHook(request, new Response(200, "@test", null));
 
 		expect(result).toBe(true);
 		expect(spy).lastCalledWith(JSON.stringify(null));
@@ -44,7 +44,7 @@ describe("serializeText", () => {
 
 		request.raw.response.write = spy;
 
-		const result = serializeTextHook(request, new Response(200, "test", "totot"));
+		const result = serializeTextHook(request, new Response(200, "@test", "totot"));
 
 		expect(result).toBe(true);
 		expect(spy).lastCalledWith("totot");
@@ -56,7 +56,7 @@ describe("serializeText", () => {
 
 		request.raw.response.write = spy;
 
-		const result = serializeTextHook(request, new Response(200, "test", 1));
+		const result = serializeTextHook(request, new Response(200, "@test", 1));
 
 		expect(result).toBe(true);
 		expect(spy).lastCalledWith("1");
@@ -68,7 +68,7 @@ describe("serializeText", () => {
 
 		request.raw.response.write = spy;
 
-		const result = serializeTextHook(request, new Response(200, "test", 1n));
+		const result = serializeTextHook(request, new Response(200, "@test", 1n));
 
 		expect(result).toBe(true);
 		expect(spy).lastCalledWith("1");

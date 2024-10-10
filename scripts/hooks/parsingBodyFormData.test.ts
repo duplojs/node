@@ -1,9 +1,9 @@
-import { createFakeRequest } from "@tests/utils/request";
+import { createFakeRequest } from "@test/utils/request";
 import { makeParsingBodyFormDataHook } from "./parsingBodyFormData";
 import { type ReceiveFormData, ReceiveFormDataIssue, stringToBytes, File } from "@duplojs/core";
 import FormData from "form-data";
 import { ParsingBodyError } from "@scripts/error/parsingBodyError";
-import { fs, fsp, fspSpyResetMock, fsSpy, fsSpyResetMock } from "@tests/utils/fs";
+import { fs, fsp, fspSpyResetMock, fsSpy, fsSpyResetMock } from "@test/utils/fs";
 import { BodySizeLimitError } from "@scripts/error/bodySizeLimitError";
 
 describe("parsingBodyFormDataHook", () => {
@@ -14,6 +14,8 @@ describe("parsingBodyFormDataHook", () => {
 		if (fs.existsSync("upload")) {
 			await fsp.rm("upload", { recursive: true });
 		}
+
+		await fsp.mkdir("upload");
 	});
 
 	afterAll(async() => {
@@ -183,7 +185,7 @@ describe("parsingBodyFormDataHook", () => {
 		} as any);
 
 		const formData = new FormData();
-		formData.append("picture", fs.createReadStream("tests/fakeFiles/1mb.png"));
+		formData.append("picture", fs.createReadStream("test/fakeFiles/1mb.png"));
 
 		const request = createFakeRequest({
 			headers: formData.getHeaders(),
@@ -214,8 +216,8 @@ describe("parsingBodyFormDataHook", () => {
 		} as any);
 
 		const formData = new FormData();
-		formData.append("picture", fs.createReadStream("tests/fakeFiles/1mb.png"));
-		formData.append("picture", fs.createReadStream("tests/fakeFiles/1mb.png"));
+		formData.append("picture", fs.createReadStream("test/fakeFiles/1mb.png"));
+		formData.append("picture", fs.createReadStream("test/fakeFiles/1mb.png"));
 
 		const request = createFakeRequest({
 			headers: formData.getHeaders(),
@@ -254,7 +256,7 @@ describe("parsingBodyFormDataHook", () => {
 		} as any);
 
 		const formData = new FormData();
-		formData.append("picture", fs.createReadStream("tests/fakeFiles/1mb.png"));
+		formData.append("picture", fs.createReadStream("test/fakeFiles/1mb.png"));
 
 		const request = createFakeRequest({
 			headers: formData.getHeaders(),
@@ -293,7 +295,7 @@ describe("parsingBodyFormDataHook", () => {
 		} as any);
 
 		const formData = new FormData();
-		formData.append("picture", fs.createReadStream("tests/fakeFiles/1mb.png"));
+		formData.append("picture", fs.createReadStream("test/fakeFiles/1mb.png"));
 
 		const request = createFakeRequest({
 			headers: formData.getHeaders(),
@@ -322,10 +324,6 @@ describe("parsingBodyFormDataHook", () => {
 	});
 
 	it("error files sizeExceeds", async() => {
-		if (fs.existsSync("upload")) {
-			await fsp.rmdir("upload", { recursive: true });
-		}
-		await fsp.mkdir("upload");
 		const parsingBodyFormDataHook = makeParsingBodyFormDataHook({
 			bodySizeLimit: 50000,
 			recieveFormDataOptions: {
@@ -336,7 +334,7 @@ describe("parsingBodyFormDataHook", () => {
 		} as any);
 
 		const formData = new FormData();
-		formData.append("picture", fs.createReadStream("tests/fakeFiles/1mb.png"));
+		formData.append("picture", fs.createReadStream("test/fakeFiles/1mb.png"));
 
 		const request = createFakeRequest({
 			headers: formData.getHeaders(),
@@ -367,7 +365,6 @@ describe("parsingBodyFormDataHook", () => {
 	});
 
 	it("error files sizeExceeds multi file", async() => {
-		await fsp.mkdir("upload");
 		const parsingBodyFormDataHook = makeParsingBodyFormDataHook({
 			bodySizeLimit: 50000,
 			recieveFormDataOptions: {
@@ -378,8 +375,8 @@ describe("parsingBodyFormDataHook", () => {
 		} as any);
 
 		const formData = new FormData();
-		formData.append("picture", fs.createReadStream("tests/fakeFiles/1mb.png"));
-		formData.append("picture", fs.createReadStream("tests/fakeFiles/2mb.png"));
+		formData.append("picture", fs.createReadStream("test/fakeFiles/1mb.png"));
+		formData.append("picture", fs.createReadStream("test/fakeFiles/2mb.png"));
 
 		const request = createFakeRequest({
 			headers: formData.getHeaders(),
@@ -412,7 +409,6 @@ describe("parsingBodyFormDataHook", () => {
 	});
 
 	it("uplaod file", async() => {
-		await fsp.mkdir("upload");
 		const parsingBodyFormDataHook = makeParsingBodyFormDataHook({
 			bodySizeLimit: 50000,
 			recieveFormDataOptions: {
@@ -423,7 +419,7 @@ describe("parsingBodyFormDataHook", () => {
 		} as any);
 
 		const formData = new FormData();
-		formData.append("picture", fs.createReadStream("tests/fakeFiles/1mb.png"));
+		formData.append("picture", fs.createReadStream("test/fakeFiles/1mb.png"));
 
 		const request = createFakeRequest({
 			headers: formData.getHeaders(),

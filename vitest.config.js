@@ -6,7 +6,8 @@ export default defineConfig({
 		watch: false,
 		globals: true,
 		include: [
-			"scripts/**/*.test.ts", 
+			"scripts/**/*.test.ts",
+			"test/integration/routes/**/*.test.ts", 
 		],
 		coverage: {
 			provider: "istanbul",
@@ -14,7 +15,7 @@ export default defineConfig({
 			reportsDirectory: "coverage",
 			exclude: [
 				"**/*.test.ts",
-				"tests/utils",
+				"test/utils",
 				"dist",
 			],
 		},

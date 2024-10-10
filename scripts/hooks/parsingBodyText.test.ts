@@ -1,4 +1,4 @@
-import { createFakeRequest } from "@tests/utils/request";
+import { createFakeRequest } from "@test/utils/request";
 import { makeParsingBodyTextHook } from "./parsingBodyText";
 import { ParsingBodyError } from "@scripts/error/parsingBodyError";
 import { BodySizeLimitError } from "@scripts/error/bodySizeLimitError";
@@ -46,7 +46,7 @@ describe("parsingBodyTextHook", () => {
 		});
 
 		setTimeout(() => {
-			request.raw.request.emit("data", "tototototo");
+			request.raw.request.emit("data", Buffer.from("tototototo"));
 		});
 
 		await expect(() => parsingBodyTextHook(request)).rejects.toThrowError(BodySizeLimitError);
@@ -64,7 +64,7 @@ describe("parsingBodyTextHook", () => {
 		});
 
 		setTimeout(() => {
-			request.raw.request.emit("data", "tototototo");
+			request.raw.request.emit("data", Buffer.from("tototototo"));
 			request.raw.request.emit("end");
 		});
 
@@ -104,7 +104,7 @@ describe("parsingBodyTextHook", () => {
 		});
 
 		setTimeout(() => {
-			request.raw.request.emit("data", "{\"toto\":1}");
+			request.raw.request.emit("data", Buffer.from("{\"toto\":1}"));
 			request.raw.request.emit("end");
 		});
 
