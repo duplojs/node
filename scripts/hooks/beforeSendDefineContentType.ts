@@ -1,6 +1,6 @@
 import { type CurrentRequestObject, type PresetGenericResponse, File } from "@duplojs/core";
 
-export function beforSendDefineContentType(request: CurrentRequestObject, response: PresetGenericResponse) {
+export function beforSendDefineContentTypeHook(request: CurrentRequestObject, response: PresetGenericResponse) {
 	if (response.headers["content-type"]) {
 		return;
 	}

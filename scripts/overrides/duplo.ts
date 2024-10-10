@@ -4,10 +4,11 @@ import https from "https";
 import fastQueryString from "fast-querystring";
 import { makeParsingBodyTextHook } from "@scripts/hooks/parsingBodyText";
 import { makeParsingBodyFormDataHook } from "@scripts/hooks/parsingBodyFormData";
-import { afterSendDeleteAttachedFiles } from "@scripts/hooks/afterSendDeleteAttachedFiles";
-import { beforSendDefineContentType } from "@scripts/hooks/beforeSendDefineContentType";
+import { afterSendDeleteAttachedFilesHook } from "@scripts/hooks/afterSendDeleteAttachedFiles";
+import { beforSendDefineContentTypeHook } from "@scripts/hooks/beforeSendDefineContentType";
 import { serializeFileHook } from "@scripts/hooks/serializeFile";
 import { serializeTextHook } from "@scripts/hooks/serializeText";
+import { onErrorHook } from "@scripts/hooks/onError";
 
 export interface Hosts {
 	"::": true;
@@ -47,10 +48,11 @@ Duplo.prototype.launch = async function(this: Duplo, onStart) {
 
 	this.hooksRouteLifeCycle.parsingBody.addSubscriber(makeParsingBodyTextHook(this.config));
 	this.hooksRouteLifeCycle.parsingBody.addSubscriber(makeParsingBodyFormDataHook(this.config));
-	this.hooksRouteLifeCycle.beforeSend.addSubscriber(beforSendDefineContentType);
+	this.hooksRouteLifeCycle.onError.addSubscriber(onErrorHook);
+	this.hooksRouteLifeCycle.beforeSend.addSubscriber(beforSendDefineContentTypeHook);
 	this.hooksRouteLifeCycle.serializeBody.addSubscriber(serializeFileHook);
 	this.hooksRouteLifeCycle.serializeBody.addSubscriber(serializeTextHook);
-	this.hooksRouteLifeCycle.afterSend.addSubscriber(afterSendDeleteAttachedFiles);
+	this.hooksRouteLifeCycle.afterSend.addSubscriber(afterSendDeleteAttachedFilesHook);
 
 	const router = new Router(
 		this.duploses.filter((duplose) => duplose instanceof Route),

@@ -1,9 +1,9 @@
-import { NoContentHttpResponse, receiveFormData, recieveFiles, useBuilder, zod } from "@duplojs/core";
+import { NoContentHttpResponse, recieveFiles, useBuilder, zod } from "@duplojs/core";
 
 useBuilder()
 	.createRoute("POST", "/docs")
 	.extract({
-		body: receiveFormData({
+		body: zod.receiveFormData({
 			docs: recieveFiles({
 				quantity: [1, 2],
 				maxSize: "1mb",

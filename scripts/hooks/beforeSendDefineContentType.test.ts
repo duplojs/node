@@ -1,5 +1,5 @@
 import { Response, File } from "@duplojs/core";
-import { beforSendDefineContentType } from "./beforeSendDefineContentType";
+import { beforSendDefineContentTypeHook } from "./beforeSendDefineContentType";
 import { createFakeRequest } from "@test/utils/request";
 
 describe("beforeSendDefineContentType", () => {
@@ -8,7 +8,7 @@ describe("beforeSendDefineContentType", () => {
 	it("content type already define", () => {
 		const response = new Response(200, "toto", undefined).setHeader("content-type", "@test");
 
-		beforSendDefineContentType(request, response);
+		beforSendDefineContentTypeHook(request, response);
 
 		expect(response.headers["content-type"]).toBe("@test");
 	});
@@ -16,7 +16,7 @@ describe("beforeSendDefineContentType", () => {
 	it("content type file", () => {
 		const response = new Response(200, "toto", new File("/test.png"));
 
-		beforSendDefineContentType(request, response);
+		beforSendDefineContentTypeHook(request, response);
 
 		expect(response.headers["content-type"]).toBe("image/png");
 	});
@@ -24,7 +24,7 @@ describe("beforeSendDefineContentType", () => {
 	it("content type file", () => {
 		const response = new Response(200, "toto", {});
 
-		beforSendDefineContentType(request, response);
+		beforSendDefineContentTypeHook(request, response);
 
 		expect(response.headers["content-type"]).toBe("application/json; charset=utf-8");
 	});
@@ -32,7 +32,7 @@ describe("beforeSendDefineContentType", () => {
 	it("content type text", () => {
 		const response = new Response(200, "toto", "@test");
 
-		beforSendDefineContentType(request, response);
+		beforSendDefineContentTypeHook(request, response);
 
 		expect(response.headers["content-type"]).toBe("text/plain; charset=utf-8");
 	});
@@ -40,7 +40,7 @@ describe("beforeSendDefineContentType", () => {
 	it("content type null", () => {
 		const response = new Response(200, "toto", null);
 
-		beforSendDefineContentType(request, response);
+		beforSendDefineContentTypeHook(request, response);
 
 		expect(response.headers["content-type"]).toBe("text/plain; charset=utf-8");
 	});
@@ -48,7 +48,7 @@ describe("beforeSendDefineContentType", () => {
 	it("content type number", () => {
 		const response = new Response(200, "toto", 123);
 
-		beforSendDefineContentType(request, response);
+		beforSendDefineContentTypeHook(request, response);
 
 		expect(response.headers["content-type"]).toBe("text/plain; charset=utf-8");
 	});
