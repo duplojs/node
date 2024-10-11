@@ -27,7 +27,7 @@ export default [
 			"@typescript-eslint/no-unsafe-argument": "off",
 			"no-useless-assignment": "off",
 		},
-		files: ["**/*.test.ts", "test/**/*.ts"],
+		files: ["**/*.test.ts", "@test/**/*.ts"],
 		ignores: ["**/*.d.ts"]
 	},
 	{
@@ -37,8 +37,9 @@ export default [
 			"max-classes-per-file": "off",
 			"no-useless-assignment": "off",
 			"@typescript-eslint/no-namespace": "off",
+			"@typescript-eslint/no-misused-promises": "off",
 		},
 		files: ["**/*.ts"],
-		ignores: ["**/*.test.ts", "test/**/*.ts", "**/*.d.ts"],
+		ignores: ["**/*.test.ts", "@test/**/*.ts", "**/*.d.ts"],
 	},
 ];

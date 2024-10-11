@@ -1,0 +1,12 @@
+{	
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+	"resolveJsonModule": true,
+    "baseUrl": "./",
+    "paths": {
+		"@routes/*": ["routes/*"],
+		"@test/*": ["test/*"],
+	}, 
+  },
+  "include": ["routes/**/*.ts", "test/**/*.ts"],
+}
