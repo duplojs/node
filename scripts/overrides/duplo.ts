@@ -30,7 +30,6 @@ declare module "@duplojs/core" {
 	}
 
 	interface Duplo<GenericDuploInputConfig extends DuploInputConfig> {
-		router?: Router;
 		launch(onStart?: (instance: Duplo) => void): Promise<
 			unknown extends GenericDuploInputConfig["https"]
 				? http.Server
@@ -55,11 +54,14 @@ Duplo.prototype.launch = async function(this: Duplo, onStart) {
 	this.hooksRouteLifeCycle.afterSend.addSubscriber(afterSendDeleteAttachedFilesHook);
 
 	const router = new Router(
+		this,
 		this.duploses.filter((duplose) => duplose instanceof Route),
 		notfoundRoute,
 	);
 
-	this.router = router;
+	const buildedRouter = await router.build();
+
+	this.buildedRouter = buildedRouter;
 
 	const server = this.config.https
 		? https.createServer(this.config.https)
@@ -75,7 +77,7 @@ Duplo.prototype.launch = async function(this: Duplo, onStart) {
 			const query = queryString ? fastQueryString.parse(queryString) : {};
 			const path = unformatedPath.endsWith("/") ? (unformatedPath.slice(0, -1) || "/") : unformatedPath;
 
-			const { buildedRoute, matchedPath, params } = router.find(method, path);
+			const { buildedRoute, matchedPath, params } = buildedRouter.find(method, path);
 
 			const request = new Request({
 				method,

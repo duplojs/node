@@ -1,4 +1,4 @@
-import { ReceiveFormData, ReceiveFormDataIssue, type CurrentRequestObject, type DuploConfig, File } from "@duplojs/core";
+import { ReceiveFormData, ReceiveFormDataIssue, type CurrentRequestObject, type DuploConfig, File, type ReceiveFormDataExtractor } from "@duplojs/core";
 import { BodySizeLimitError } from "@scripts/error/bodySizeLimitError";
 import { ParsingBodyError } from "@scripts/error/parsingBodyError";
 import busboy from "busboy";
@@ -26,7 +26,7 @@ export function makeParsingBodyFormDataHook(config: DuploConfig) {
 		}
 
 		request.body = new ReceiveFormData(
-			(params) => new Promise<ReceiveFormDataIssue | Record<string, unknown>>(
+			(params) => new Promise<Awaited<ReturnType<ReceiveFormDataExtractor>>>(
 				(resolve, reject) => {
 					function errorCallback(error: unknown) {
 						if (error instanceof ReceiveFormDataIssue) {
@@ -40,7 +40,7 @@ export function makeParsingBodyFormDataHook(config: DuploConfig) {
 					try {
 						const promiseList: Promise<unknown>[] = [];
 						const resultFiles: Record<string, File[]> = {};
-						const resultFields: Record<string, unknown> = {};
+						const resultFields: Record<string, string | string[]> = {};
 						const strict = params.strict ?? recieveFormDataOptions.strict;
 						const highWaterMark = params.highWaterMark ?? 65536;
 
@@ -86,7 +86,11 @@ export function makeParsingBodyFormDataHook(config: DuploConfig) {
 
 									const { filename, mimeType } = info;
 
-									if (!propFileExpected.mimeTypes.includes(mimeType)) {
+									if (
+										!propFileExpected.mimeTypes.find(
+											(regExpMimeType) => regExpMimeType.test(mimeType),
+										)
+									) {
 										busboyPipe.emit("error", new ReceiveFormDataIssue("file", prop, "wrongMimeType"));
 										return;
 									}
@@ -126,6 +130,10 @@ export function makeParsingBodyFormDataHook(config: DuploConfig) {
 									});
 
 									filePipe.on("error", (error) => {
+										busboyPipe.emit("error", error);
+									});
+
+									writeStream.on("error", (error) => {
 										busboyPipe.emit("error", error);
 									});
 

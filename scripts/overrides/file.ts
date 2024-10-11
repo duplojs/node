@@ -1,43 +1,24 @@
 import { File } from "@duplojs/core";
-import { rename, unlink } from "fs/promises";
-import { dirname, resolve } from "path";
+import { access, rename, unlink } from "fs/promises";
 
-declare module "@duplojs/core" {
-	interface File {
-		rename(newName: string): Promise<void>;
-		move(newBasePath: string): Promise<void>;
-		deplace(newPath: string): Promise<void>;
-		delete(): Promise<void>;
-	}
-}
-
-File.prototype.delete = function() {
-	return unlink(this.path);
+File.delete = function(path) {
+	return unlink(path);
 };
 
-File.prototype.move = function(newBasePath) {
-	const { name } = this.informations;
-	const newPath = resolve(newBasePath, name);
-
-	return rename(this.path, newPath)
-		.then(() => void (this.path = newPath));
+File.move = function(path, newPath) {
+	return rename(path, newPath);
 };
 
-File.prototype.rename = function(newName) {
-	const directory = dirname(this.path);
-	const newPath = resolve(directory, newName);
-
-	return rename(this.path, newPath)
-		.then(() => {
-			const { informations } = new File(newPath);
-			this.informations = informations;
-		});
+File.rename = function(path, newPath) {
+	return rename(path, newPath);
 };
 
-File.prototype.deplace = function(newPath) {
-	return rename(this.path, newPath)
-		.then(() => {
-			const { informations } = new File(newPath);
-			this.informations = informations;
-		});
+File.deplace = function(path, newPath) {
+	return rename(path, newPath);
+};
+
+File.exist = function(path) {
+	return access(path)
+		.then(() => true)
+		.catch(() => false);
 };

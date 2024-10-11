@@ -1,4 +1,4 @@
-import { fspSpy, fspSpyResetMock } from "@test/utils/fs";
+import { fsp, fspSpy, fspSpyResetMock } from "@test/utils/fs";
 import "./file";
 import { File } from "@duplojs/core";
 
@@ -37,7 +37,7 @@ describe("file", () => {
 		expect(fspSpy.rename).toBeCalledWith("/lulu/toto.png", "/lala/toto.png");
 	});
 
-	it("move", async() => {
+	it("rename", async() => {
 		const file = new File("/ioi/toto.png");
 
 		fspSpy.rename.mockResolvedValue(undefined);
@@ -45,5 +45,12 @@ describe("file", () => {
 		await file.rename("tutu.png");
 
 		expect(fspSpy.rename).toBeCalledWith("/ioi/toto.png", "/ioi/tutu.png");
+	});
+
+	it("exist", async() => {
+		fspSpy.access.mockImplementation(fsp.access);
+
+		expect(await new File("/ioi/toto.png").exist()).toBe(false);
+		expect(await new File("test/fakeFiles/1mb.png").exist()).toBe(true);
 	});
 });

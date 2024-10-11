@@ -10,6 +10,9 @@ describe("docs", async() => {
 		host: "localhost",
 		port: 14092,
 		bodySizeLimit: "1.1mb",
+		recieveFormDataOptions: {
+			uploadDirectory: "test/upload/docs",
+		},
 	});
 
 	duplo.register(...useBuilder.getLastCreatedDuploses());
@@ -17,7 +20,7 @@ describe("docs", async() => {
 	const server = await duplo.launch();
 
 	beforeEach(async() => {
-		for (const directory of ["upload", "savedFile"]) {
+		for (const directory of ["test/upload/docs", "test/savedFile/docs"]) {
 			if (existsSync(directory)) {
 				await rm(directory, { recursive: true });
 			}
@@ -27,7 +30,7 @@ describe("docs", async() => {
 	});
 
 	afterAll(async() => {
-		for (const directory of ["upload", "savedFile"]) {
+		for (const directory of ["test/upload/docs", "test/savedFile/docs"]) {
 			if (existsSync(directory)) {
 				await rm(directory, { recursive: true });
 			}
@@ -57,8 +60,8 @@ describe("docs", async() => {
 		);
 
 		expect(result.status).toBe(204);
-		expect(existsSync("savedFile/toto.png")).toBe(true);
-		expect((await lstat("savedFile/toto.png")).size).toBe(stringToBytes("1mb"));
+		expect(existsSync("test/savedFile/docs/toto.png")).toBe(true);
+		expect((await lstat("test/savedFile/docs/toto.png")).size).toBe(stringToBytes("1mb"));
 	});
 
 	it("send file but not accepte", async() => {
@@ -82,7 +85,7 @@ describe("docs", async() => {
 		);
 
 		expect(result.status).toBe(204);
-		expect((await readdir("upload")).length).toBe(0);
+		expect((await readdir("test/upload/docs")).length).toBe(0);
 	});
 
 	it("send file body size exceeds", async() => {
@@ -105,7 +108,7 @@ describe("docs", async() => {
 		);
 
 		expect(result.headers.get("information")).toBe("BODY_SIZE_EXCEEDS");
-		expect((await readdir("upload")).length).toBe(0);
+		expect((await readdir("test/upload/docs")).length).toBe(0);
 	});
 
 	it("send file error parsing body", async() => {
@@ -131,6 +134,6 @@ describe("docs", async() => {
 		);
 
 		expect(result.headers.get("information")).toBe("PARSING_BODY_ERROR");
-		expect((await readdir("upload")).length).toBe(0);
+		expect((await readdir("test/upload/docs")).length).toBe(0);
 	});
 });

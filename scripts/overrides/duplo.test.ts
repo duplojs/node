@@ -117,7 +117,7 @@ describe("duplo", () => {
 		const server = await duplo.launch();
 		await new Promise<void>((res) => void server?.close(() => void res()));
 
-		duplo.router!.find = vi.fn().mockImplementation(() => ({
+		duplo.buildedRouter!.find = vi.fn().mockImplementation(() => ({
 			buildedRoute: () => {
 				throw new Error();
 			},

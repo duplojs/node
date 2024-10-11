@@ -16,7 +16,7 @@ useBuilder()
 		const { docs, accepte } = pickup("body");
 
 		if (accepte) {
-			await docs.at(0)!.deplace("savedFile/toto.png");
+			await docs.at(0)!.deplace("test/savedFile/docs/toto.png");
 		}
 
 		return new NoContentHttpResponse("uploadedFile");

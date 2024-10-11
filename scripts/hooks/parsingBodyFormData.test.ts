@@ -1,9 +1,10 @@
+import "@scripts/overrides/file";
 import { createFakeRequest } from "@test/utils/request";
 import { makeParsingBodyFormDataHook } from "./parsingBodyFormData";
 import { type ReceiveFormData, ReceiveFormDataIssue, stringToBytes, File } from "@duplojs/core";
 import FormData from "form-data";
 import { ParsingBodyError } from "@scripts/error/parsingBodyError";
-import { fs, fsp, fspSpyResetMock, fsSpy, fsSpyResetMock } from "@test/utils/fs";
+import { fs, fsp, fspSpy, fspSpyResetMock, fsSpy, fsSpyResetMock } from "@test/utils/fs";
 import { BodySizeLimitError } from "@scripts/error/bodySizeLimitError";
 
 describe("parsingBodyFormDataHook", () => {
@@ -11,16 +12,16 @@ describe("parsingBodyFormDataHook", () => {
 		fsSpyResetMock();
 		fspSpyResetMock();
 
-		if (fs.existsSync("upload")) {
-			await fsp.rm("upload", { recursive: true });
+		if (fs.existsSync("test/upload/parsingBodyFormDataHook")) {
+			await fsp.rm("test/upload/parsingBodyFormDataHook", { recursive: true });
 		}
 
-		await fsp.mkdir("upload");
+		await fsp.mkdir("test/upload/parsingBodyFormDataHook");
 	});
 
 	afterAll(async() => {
-		if (fs.existsSync("upload")) {
-			await fsp.rm("upload", { recursive: true });
+		if (fs.existsSync("test/upload/parsingBodyFormDataHook")) {
+			await fsp.rm("test/upload/parsingBodyFormDataHook", { recursive: true });
 		}
 	});
 
@@ -29,7 +30,7 @@ describe("parsingBodyFormDataHook", () => {
 			bodySizeLimit: 50000,
 			recieveFormDataOptions: {
 				strict: true,
-				uploadDirectory: "upload",
+				uploadDirectory: "test/upload/parsingBodyFormDataHook",
 				prefixTempName: "tmp-",
 			},
 		} as any);
@@ -46,7 +47,7 @@ describe("parsingBodyFormDataHook", () => {
 			bodySizeLimit: 12,
 			recieveFormDataOptions: {
 				strict: true,
-				uploadDirectory: "upload",
+				uploadDirectory: "test/upload/parsingBodyFormDataHook",
 				prefixTempName: "tmp-",
 			},
 		} as any);
@@ -66,7 +67,7 @@ describe("parsingBodyFormDataHook", () => {
 			bodySizeLimit: 50000,
 			recieveFormDataOptions: {
 				strict: true,
-				uploadDirectory: "upload",
+				uploadDirectory: "test/upload/parsingBodyFormDataHook",
 				prefixTempName: "tmp-",
 			},
 		} as any);
@@ -86,7 +87,7 @@ describe("parsingBodyFormDataHook", () => {
 			bodySizeLimit: 50000,
 			recieveFormDataOptions: {
 				strict: true,
-				uploadDirectory: "upload",
+				uploadDirectory: "test/upload/parsingBodyFormDataHook",
 				prefixTempName: "tmp-",
 			},
 		} as any);
@@ -116,7 +117,7 @@ describe("parsingBodyFormDataHook", () => {
 		const parsingBodyFormDataHook = makeParsingBodyFormDataHook({
 			bodySizeLimit: 50000,
 			recieveFormDataOptions: {
-				uploadDirectory: "upload",
+				uploadDirectory: "test/upload/parsingBodyFormDataHook",
 				prefixTempName: "tmp-",
 				strict: false,
 			},
@@ -146,7 +147,7 @@ describe("parsingBodyFormDataHook", () => {
 		const parsingBodyFormDataHook = makeParsingBodyFormDataHook({
 			bodySizeLimit: 50000,
 			recieveFormDataOptions: {
-				uploadDirectory: "upload",
+				uploadDirectory: "test/upload/parsingBodyFormDataHook",
 				prefixTempName: "tmp-",
 				strict: false,
 			},
@@ -179,7 +180,7 @@ describe("parsingBodyFormDataHook", () => {
 			bodySizeLimit: 50000,
 			recieveFormDataOptions: {
 				strict: true,
-				uploadDirectory: "upload",
+				uploadDirectory: "test/upload/parsingBodyFormDataHook",
 				prefixTempName: "tmp-",
 			},
 		} as any);
@@ -210,7 +211,7 @@ describe("parsingBodyFormDataHook", () => {
 			bodySizeLimit: 50000,
 			recieveFormDataOptions: {
 				strict: true,
-				uploadDirectory: "upload",
+				uploadDirectory: "test/upload/parsingBodyFormDataHook",
 				prefixTempName: "tmp-",
 			},
 		} as any);
@@ -236,7 +237,7 @@ describe("parsingBodyFormDataHook", () => {
 				picture: {
 					maxQuantity: 0,
 					maxSize: stringToBytes("1.5mb"),
-					mimeTypes: ["image/png"],
+					mimeTypes: [/^image\/png$/],
 				},
 			},
 		});
@@ -250,7 +251,7 @@ describe("parsingBodyFormDataHook", () => {
 			bodySizeLimit: 50000,
 			recieveFormDataOptions: {
 				strict: false,
-				uploadDirectory: "upload",
+				uploadDirectory: "test/upload/parsingBodyFormDataHook",
 				prefixTempName: "tmp-",
 			},
 		} as any);
@@ -275,46 +276,7 @@ describe("parsingBodyFormDataHook", () => {
 				picture: {
 					maxQuantity: 1,
 					maxSize: stringToBytes("1.5mb"),
-					mimeTypes: ["text/plain"],
-				},
-			},
-		});
-
-		expect(result).instanceof(ReceiveFormDataIssue);
-		expect(result.message).toBe("picture : file wrongMimeType");
-	});
-
-	it("error files wrongMimeType", async() => {
-		const parsingBodyFormDataHook = makeParsingBodyFormDataHook({
-			bodySizeLimit: 50000,
-			recieveFormDataOptions: {
-				strict: false,
-				uploadDirectory: "upload",
-				prefixTempName: "tmp-",
-			},
-		} as any);
-
-		const formData = new FormData();
-		formData.append("picture", fs.createReadStream("test/fakeFiles/1mb.png"));
-
-		const request = createFakeRequest({
-			headers: formData.getHeaders(),
-			raw: {
-				request: {
-					body: formData,
-				},
-			},
-		});
-
-		parsingBodyFormDataHook(request);
-		const receiveFormData = request.body as ReceiveFormData;
-
-		const result = await receiveFormData.extractor({
-			files: {
-				picture: {
-					maxQuantity: 1,
-					maxSize: stringToBytes("1.5mb"),
-					mimeTypes: ["text/plain"],
+					mimeTypes: [/^image\/jpeg$/],
 				},
 			},
 		});
@@ -328,7 +290,7 @@ describe("parsingBodyFormDataHook", () => {
 			bodySizeLimit: 50000,
 			recieveFormDataOptions: {
 				strict: false,
-				uploadDirectory: "upload",
+				uploadDirectory: "test/upload/parsingBodyFormDataHook",
 				prefixTempName: "tmp-",
 			},
 		} as any);
@@ -354,7 +316,7 @@ describe("parsingBodyFormDataHook", () => {
 				picture: {
 					maxQuantity: 1,
 					maxSize: stringToBytes("1mb") - 1,
-					mimeTypes: ["image/png"],
+					mimeTypes: [/^image\/png$/],
 				},
 			},
 		});
@@ -369,7 +331,7 @@ describe("parsingBodyFormDataHook", () => {
 			bodySizeLimit: 50000,
 			recieveFormDataOptions: {
 				strict: false,
-				uploadDirectory: "upload",
+				uploadDirectory: "test/upload/parsingBodyFormDataHook",
 				prefixTempName: "tmp-",
 			},
 		} as any);
@@ -396,7 +358,7 @@ describe("parsingBodyFormDataHook", () => {
 				picture: {
 					maxQuantity: 2,
 					maxSize: stringToBytes("1mb"),
-					mimeTypes: ["image/png"],
+					mimeTypes: [/^image\/png$/],
 				},
 			},
 		});
@@ -413,7 +375,7 @@ describe("parsingBodyFormDataHook", () => {
 			bodySizeLimit: 50000,
 			recieveFormDataOptions: {
 				strict: false,
-				uploadDirectory: "upload",
+				uploadDirectory: "test/upload/parsingBodyFormDataHook",
 				prefixTempName: "tmp-",
 			},
 		} as any);
@@ -439,7 +401,7 @@ describe("parsingBodyFormDataHook", () => {
 				picture: {
 					maxQuantity: 2,
 					maxSize: stringToBytes("1mb"),
-					mimeTypes: ["image/png"],
+					mimeTypes: [/^image\/png$/],
 				},
 			},
 		}) as Record<string, File[]>;
@@ -447,5 +409,43 @@ describe("parsingBodyFormDataHook", () => {
 		expect(request.attachedFilePaths?.length).toBe(1);
 		expect(result.picture.at(0)).instanceOf(File);
 		expect(fs.lstatSync(request.attachedFilePaths?.at(0) ?? "").size).toBe(stringToBytes("1mb"));
+	});
+
+	it("uplaod file in missing directory", async() => {
+		const parsingBodyFormDataHook = makeParsingBodyFormDataHook({
+			bodySizeLimit: 50000,
+			recieveFormDataOptions: {
+				strict: false,
+				uploadDirectory: "test/upload/missingDirectory",
+				prefixTempName: "tmp-",
+			},
+		} as any);
+
+		const formData = new FormData();
+		formData.append("picture", fs.createReadStream("test/fakeFiles/1mb.png"));
+
+		const request = createFakeRequest({
+			headers: formData.getHeaders(),
+			raw: {
+				request: {
+					body: formData,
+				},
+			},
+		});
+
+		parsingBodyFormDataHook(request);
+		const receiveFormData = request.body as ReceiveFormData;
+
+		const result = receiveFormData.extractor({
+			files: {
+				picture: {
+					maxQuantity: 1,
+					maxSize: stringToBytes("1mb"),
+					mimeTypes: [/^image\/png$/],
+				},
+			},
+		});
+
+		await expect(result).rejects.toThrowError(Error);
 	});
 });

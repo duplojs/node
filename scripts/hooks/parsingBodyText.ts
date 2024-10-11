@@ -1,6 +1,7 @@
 import { type DuploConfig, type CurrentRequestObject } from "@duplojs/core";
 import { BodySizeLimitError } from "@scripts/error/bodySizeLimitError";
 import { ParsingBodyError } from "@scripts/error/parsingBodyError";
+import { WrongTypeChunk } from "@scripts/error/wrongTypeChunk";
 
 export function makeParsingBodyTextHook(config: DuploConfig) {
 	const { bodySizeLimit } = config;
@@ -34,7 +35,7 @@ export function makeParsingBodyTextHook(config: DuploConfig) {
 
 				request.raw.request.on("data", (chunck) => {
 					if (!(chunck instanceof Buffer) && typeof chunck !== "string") {
-						request.raw.request.emit("error", new Error("Recieve chunck is not buffer or string."));
+						request.raw.request.emit("error", new WrongTypeChunk());
 						return;
 					}
 
