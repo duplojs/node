@@ -19,10 +19,15 @@
   },
   "types": "./dist/index.d.ts",
   "exports": {
-    "default": {
+    ".": {
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs",
       "types": "./dist/index.d.ts"
+    },
+	"./globals": {
+      "import": "./dist/globals.mjs",
+      "require": "./dist/globals.cjs",
+      "types": "./dist/globals.d.ts"
     }
   },
   "files": [
@@ -33,7 +38,7 @@
     "test/integration"
   ],
   "peerDependencies": {
-    "@duplojs/core": ">=0.19.2 <1.0.0"
+    "@duplojs/core": ">=0.20.0 <1.0.0"
   },
   "dependencies": {
     "busboy": "^1.6.0",
