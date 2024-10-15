@@ -8,5 +8,5 @@
 		"@test/*": ["test/*"],
 	}, 
   },
-  "include": ["routes/**/*.ts", "test/**/*.ts"],
+  "include": ["routes/**/*.ts", "test/**/*.ts", "globals.test.ts"],
 }
