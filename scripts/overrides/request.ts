@@ -7,6 +7,9 @@ export interface RawRequest {
 }
 
 declare module "@duplojs/core" {
+	interface DisabledExtractKey {
+		raw: true;
+	}
 	interface RequestInitializationData {
 		raw: RawRequest;
 	}
