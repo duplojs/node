@@ -7,7 +7,7 @@ export default defineConfig({
 		globals: true,
 		include: [
 			"scripts/**/*.test.ts",
-			"test/integration/routes/**/*.test.ts", 
+			"test/integration/**/*.test.ts", 
 		],
 		coverage: {
 			provider: "istanbul",

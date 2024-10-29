@@ -38,7 +38,7 @@
     "test/integration"
   ],
   "peerDependencies": {
-    "@duplojs/core": ">=0.20.0 <1.0.0"
+    "@duplojs/core": ">=0.20.2 <1.0.0"
   },
   "dependencies": {
     "busboy": "^1.6.0",

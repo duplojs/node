@@ -40,7 +40,7 @@ declare module "@duplojs/core" {
 
 Duplo.prototype.launch = async function(this: Duplo, onStart) {
 	const notfoundHandler = this.notfoundHandler;
-	const notfoundRoute = useRouteBuilder<Request>(new Route("GET", ["/*"])).handler((pickup, request) => notfoundHandler(request));
+	const notfoundRoute = useRouteBuilder<Request>("GET", ["/*"]).handler((pickup, request) => notfoundHandler(request));
 	notfoundRoute.instance = this;
 
 	await this.hooksInstanceLifeCycle.beforeBuildRouter.launchSubscriberAsync(this);
@@ -55,7 +55,7 @@ Duplo.prototype.launch = async function(this: Duplo, onStart) {
 
 	const router = new Router(
 		this,
-		this.duploses.filter((duplose) => duplose instanceof Route),
+		this.duploses.filter((duplose): duplose is Route => duplose instanceof Route),
 		notfoundRoute,
 	);
 

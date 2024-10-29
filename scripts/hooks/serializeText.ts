@@ -3,7 +3,12 @@ import type { CurrentRequestObject, PresetGenericResponse } from "@duplojs/core"
 export function serializeTextHook(request: CurrentRequestObject, response: PresetGenericResponse) {
 	const body = response.body;
 
-	if (typeof body === "object") {
+	if (body instanceof Error) {
+		request.raw.response.write(
+			body.toString(),
+		);
+		return true;
+	} else if (typeof body === "object") {
 		request.raw.response.write(
 			JSON.stringify(body),
 		);
