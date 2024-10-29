@@ -14,6 +14,18 @@ describe("serializeText", () => {
 		expect(spy).toHaveBeenCalledTimes(0);
 	});
 
+	it("body error", () => {
+		const spy = vi.fn().mockImplementation(() => undefined);
+		const request = createFakeRequest();
+
+		request.raw.response.write = spy;
+
+		const result = serializeTextHook(request, new Response(200, "@test", new Error("test")));
+
+		expect(result).toBe(true);
+		expect(spy).lastCalledWith("Error: test");
+	});
+
 	it("body object", () => {
 		const spy = vi.fn().mockImplementation(() => undefined);
 		const request = createFakeRequest();
