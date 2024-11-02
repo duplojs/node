@@ -1,7 +1,7 @@
 import { type DuploConfig, type CurrentRequestObject } from "@duplojs/core";
 import { BodySizeLimitError } from "@scripts/error/bodySizeLimitError";
 import { ParsingBodyError } from "@scripts/error/parsingBodyError";
-import { WrongTypeChunk } from "@scripts/error/wrongTypeChunk";
+import { WrongTypeChunk } from "@scripts/error/wrongTypeChunkError";
 
 export function makeParsingBodyTextHook(config: DuploConfig) {
 	const { bodySizeLimit } = config;
