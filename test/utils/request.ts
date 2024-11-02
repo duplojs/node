@@ -1,5 +1,3 @@
-
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { type RequestInitializationData, Request } from "@duplojs/core";
 import httpMocks from "node-mocks-http";
 import FormData from "form-data";
