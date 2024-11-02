@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import type * as fileSysteme from "fs";
 import type * as fileSystemePromise from "fs/promises";
 import type { Mock } from "vitest";
