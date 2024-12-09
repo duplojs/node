@@ -107,7 +107,9 @@ Duplo.prototype.launch = async function(this: Duplo, onStart) {
 
 				await buildedRoute.context.hooks.serializeBody(request, response);
 
-				serverResponse.end();
+				if (!response.keepAlive) {
+					serverResponse.end();
+				}
 
 				await buildedRoute.context.hooks.afterSend(request, response);
 			} catch (error) {

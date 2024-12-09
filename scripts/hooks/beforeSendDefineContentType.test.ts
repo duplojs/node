@@ -52,4 +52,12 @@ describe("beforeSendDefineContentType", () => {
 
 		expect(response.headers["content-type"]).toBe("text/plain; charset=utf-8");
 	});
+
+	it("content type error", () => {
+		const response = new Response(200, "toto", new Error());
+
+		beforSendDefineContentTypeHook(request, response);
+
+		expect(response.headers["content-type"]).toBe("text/plain; charset=utf-8");
+	});
 });
