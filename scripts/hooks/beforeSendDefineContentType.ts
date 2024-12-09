@@ -9,6 +9,8 @@ export function beforSendDefineContentTypeHook(request: CurrentRequestObject, re
 
 	if (body instanceof File) {
 		response.headers["content-type"] = body.informations.mimeType || "text/plain; charset=utf-8";
+	} else if (body instanceof Error) {
+		response.headers["content-type"] = "text/plain; charset=utf-8";
 	} else if (body && typeof body === "object") {
 		response.headers["content-type"] = "application/json; charset=utf-8";
 	} else if (
