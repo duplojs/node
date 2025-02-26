@@ -1,11 +1,12 @@
 import "@scripts/overrides/file";
 import { createFakeRequest } from "@test/utils/request";
 import { makeParsingBodyFormDataHook } from "./parsingBodyFormData";
-import { type ReceiveFormData, ReceiveFormDataIssue, stringToBytes, File } from "@duplojs/core";
+import { type ReceiveFormData, ReceiveFormDataIssue, File } from "@duplojs/core";
 import FormData from "form-data";
 import { ParsingBodyError } from "@scripts/error/parsingBodyError";
 import { fs, fsp, fspSpy, fspSpyResetMock, fsSpy, fsSpyResetMock } from "@test/utils/fs";
 import { BodySizeLimitError } from "@scripts/error/bodySizeLimitError";
+import { stringToBytes } from "@duplojs/utils";
 
 describe("parsingBodyFormDataHook", () => {
 	beforeEach(async() => {

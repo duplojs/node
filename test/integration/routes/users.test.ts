@@ -1,5 +1,5 @@
 import "@duplojs/node";
-import { Duplo, useBuilder } from "@duplojs/core";
+import { Duplo, useRouteBuilder } from "@duplojs/core";
 
 import "@routes/users";
 
@@ -10,7 +10,7 @@ describe("users", async() => {
 		port: 14091,
 	});
 
-	duplo.register(...useBuilder.getLastCreatedDuploses());
+	duplo.register(...useRouteBuilder.getAllCreatedRoute());
 
 	const server = await duplo.launch();
 

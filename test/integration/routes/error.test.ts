@@ -1,5 +1,5 @@
 import "@duplojs/node";
-import { Duplo, useBuilder } from "@duplojs/core";
+import { Duplo, useRouteBuilder } from "@duplojs/core";
 import "./error";
 
 describe("error", async() => {
@@ -9,7 +9,7 @@ describe("error", async() => {
 		port: 15092,
 	});
 
-	duplo.register(...useBuilder.getLastCreatedDuploses());
+	duplo.register(...useRouteBuilder.getAllCreatedRoute());
 
 	const server = await duplo.launch();
 

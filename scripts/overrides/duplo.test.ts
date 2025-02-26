@@ -1,14 +1,13 @@
-import { Duplo, useBuilder, Request, OkHttpResponse } from "@duplojs/core";
+import { Duplo, useBuilder, OkHttpResponse, createProcess, useProcessBuilder } from "@duplojs/core";
 import httpMocks from "node-mocks-http";
 import "./duplo";
 import { Server as ServerHttp } from "http";
 import { Server as ServerHttps } from "https";
-import type { ExpectType } from "@test/utils/expectType";
+import { type ExpectType } from "@duplojs/utils";
 
 describe("duplo", () => {
 	it("launch http", async() => {
-		useBuilder()
-			.createProcess("test")
+		createProcess("test")
 			.exportation();
 
 		const duplo = new Duplo({
@@ -17,7 +16,7 @@ describe("duplo", () => {
 			port: 15061,
 		});
 
-		duplo.register(...useBuilder.getAllCreatedDuplose());
+		duplo.register(...useProcessBuilder.getAllCreatedProcess());
 
 		const server = await duplo.launch();
 		await new Promise<void>((res) => void server.close(() => void res()));

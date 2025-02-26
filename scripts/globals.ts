@@ -1,5 +1,6 @@
 export type * from "@duplojs/core/globals";
-import { getTypedEntries, globalValues } from "@duplojs/core";
+import { globalValues } from "@duplojs/core";
+import { getTypedEntries } from "@duplojs/utils";
 
 getTypedEntries(globalValues)
 	.forEach(([key, value]) => {

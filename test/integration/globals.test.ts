@@ -1,5 +1,6 @@
 import "@duplojs/node/globals";
-import { getTypedKeys, globalValues } from "@duplojs/core";
+import { globalValues } from "@duplojs/core";
+import { getTypedKeys } from "@duplojs/utils";
 
 it("globals", () => {
 	getTypedKeys(globalValues)

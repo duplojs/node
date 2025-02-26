@@ -1,8 +1,9 @@
 import "@duplojs/node";
-import { Duplo, stringToBytes, useBuilder } from "@duplojs/core";
+import { Duplo, useRouteBuilder } from "@duplojs/core";
 import { existsSync } from "fs";
 import { lstat, mkdir, readdir, readFile, rm } from "fs/promises";
 import "@routes/docs";
+import { stringToBytes } from "@duplojs/utils";
 
 describe("docs", async() => {
 	const duplo = new Duplo({
@@ -15,7 +16,7 @@ describe("docs", async() => {
 		},
 	});
 
-	duplo.register(...useBuilder.getLastCreatedDuploses());
+	duplo.register(...useRouteBuilder.getAllCreatedRoute());
 
 	const server = await duplo.launch();
 
