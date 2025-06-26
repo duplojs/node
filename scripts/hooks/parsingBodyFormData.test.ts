@@ -449,4 +449,46 @@ describe("parsingBodyFormDataHook", () => {
 
 		await expect(result).rejects.toThrowError(Error);
 	});
+
+	it.only("i want file but a recieve nothing", async() => {
+		const parsingBodyFormDataHook = makeParsingBodyFormDataHook({
+			bodySizeLimit: 50000,
+			recieveFormDataOptions: {
+				strict: false,
+				uploadDirectory: "test/upload/parsingBodyFormDataHook",
+				prefixTempName: "tmp-",
+			},
+		} as any);
+
+		const formData = new FormData();
+		formData.append("prop1", 123);
+
+		const request = createFakeRequest({
+			headers: formData.getHeaders(),
+			raw: {
+				request: {
+					body: formData,
+				},
+			},
+		});
+
+		parsingBodyFormDataHook(request);
+		const receiveFormData = request.body as ReceiveFormData;
+
+		const result = await receiveFormData.extractor({
+			files: {
+				picture: {
+					maxQuantity: 1,
+					maxSize: stringToBytes("1mb"),
+					mimeTypes: [/^image\/png$/],
+				},
+			},
+			fields: ["prop1"],
+		});
+
+		expect(result).toStrictEqual({
+			picture: [],
+			prop1: "123",
+		});
+	});
 });

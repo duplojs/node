@@ -40,7 +40,15 @@ export function makeParsingBodyFormDataHook(config: DuploConfig) {
 					try {
 						const promiseList: Promise<unknown>[] = [];
 						const resultFiles: Record<string, File[]> = {};
-						const resultFields: Record<string, string | string[]> = {};
+						const resultFields: Record<string, string | string[]> = Object
+							.keys(params.files ?? {})
+							.reduce(
+								(acc, key) => ({
+									...acc,
+									[key]: [],
+								}),
+								{},
+							);
 						const strict = params.strict ?? recieveFormDataOptions.strict;
 						const highWaterMark = params.highWaterMark ?? 65536;
 
