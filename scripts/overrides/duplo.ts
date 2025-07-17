@@ -10,6 +10,7 @@ import { serializeFileHook } from "@scripts/hooks/serializeFile";
 import { serializeTextHook } from "@scripts/hooks/serializeText";
 import { onErrorHook } from "@scripts/hooks/onError";
 import { type GetPropsWithTrueValue } from "@duplojs/utils";
+import { safeDecodeURIComponent } from "@scripts/utils/safeDecodeURIComponent";
 
 export interface Hosts {
 	"::": true;
@@ -72,7 +73,7 @@ Duplo.prototype.launch = async function(this: Duplo, onStart) {
 	server.addListener(
 		"request",
 		async(serverRequest, serverResponse) => {
-			const url = decodeURI(serverRequest.url ?? "");
+			const url = safeDecodeURIComponent(serverRequest.url ?? "");
 			const method = serverRequest.method ?? "";
 
 			const [unformatedPath = "/", queryString = ""] = url.split("?");

@@ -450,7 +450,7 @@ describe("parsingBodyFormDataHook", () => {
 		await expect(result).rejects.toThrowError(Error);
 	});
 
-	it.only("i want file but a recieve nothing", async() => {
+	it("i want file but a recieve nothing", async() => {
 		const parsingBodyFormDataHook = makeParsingBodyFormDataHook({
 			bodySizeLimit: 50000,
 			recieveFormDataOptions: {
